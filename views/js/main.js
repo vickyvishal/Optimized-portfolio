@@ -445,14 +445,22 @@ var resizePizzas = function(size) {
     var dx = (newSize - oldSize) * windowWidth;
 
     return dx;
-  }
-
+  } 
+	var randomPizza = document.getElementsByClassName('randomPizzaContainer');
+	var randomPizzaLength = randomPizza.length; //We do not need to find randomPizza length everytime the loop runs, hence declared outside
   // Iterates through pizza elements on the page and changes their widths
-  function changePizzaSizes(size) {
-    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
-      var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
-      var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
-      document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
+  function updatedLayout(size) {
+    for (var i = 0; i < randomPizzaLength; i++) {
+      var dx = determineDx(randomPizza[i], size);
+      var newwidth = (randomPizza[i].offsetWidth + dx) + 'px';
+      return newwidth;
+    }
+  }
+  
+   var newwidth = updatedLayout(size);
+	    function changePizzaSizes(size) {
+			for (var i = 0; i < randomPizzaLength; i++) {
+      randomPizza[i].style.width = newwidth;
     }
   }
 
@@ -502,7 +510,7 @@ function updatePositions() {
   window.performance.mark("mark_start_frame");
 
   var pizzaHolder = new Array();  
-  var pizzaLength = items.length;//We do not need to find the item length everytime the loop runs
+  var pizzaLength = items.length;//We do not need to find the item length everytime the loop runs, hence declared outside
   var phaseCalc = document.body.scrollTop / 1250;//We do not need to run something whose value is constant everytime the loop runs
   
   for (var i = 0; i < pizzaLength; i++) { //this loop will specifically run to store the phase value
@@ -524,7 +532,7 @@ function updatePositions() {
   }
 }
 
-	var items;
+	var items;//defining global so that it can be accessed by other function
 // runs updatePositions on scroll
 window.addEventListener('scroll', updatePositions);
 
@@ -542,7 +550,7 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
     document.querySelector("#movingPizzas1").appendChild(elem);
   }
-  //so that it is not called everytime scrolling happens, so moved items var out of updatePositions
+  //so that it is not called everytime scrolling happens, so moved items variable out of updatePositions, this is also created after the elem(mover class) is created
   items = document.getElementsByClassName('mover') //getElementsByClassName over querySelectorAll
   updatePositions();
 });
